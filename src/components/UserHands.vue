@@ -1,10 +1,10 @@
 <template>
-  <button v-on:click="onClick" v-bind:class="{hidden : this.propsdata}"><span>{{ className }}</span></button>
+  <button v-on:click="onClick" v-bind:disabled="this.props.isReady"><span>{{ className }}</span></button>
 </template>
 
 <script>
   export default {
-    props : ['propsdata'],
+    props : ['props'],
     data (){
       return{
         className : '컴포넌트 호출 시 상위에서 class를 지정해주세요. rock, scissors, paper 가능합니다.'
@@ -19,19 +19,16 @@
     },
     methods : {
       onClick : function(){
-        var vue = this;
-        // 사용자 클릭 이벤트 전달, 선택한 손에 맞춰 className 전달
-        vue.$emit('onClick',this.matchClassName(vue.className));
-        vue.setClass();
+        // 선택한 값에 맞춰 opt에 맞는 number값 전달
+        this.$emit('onClick',this.matchOptNumber(this.className));
+        this.setClass();
       },
-      matchClassName : function(className){
-        var opt = ['rock', 'scissors', 'paper'];
-        var matchClass = '';
-        
-        opt.forEach(function(v){
-          if(className.match(v) !== null) return matchClass = className.match(v);
+      matchOptNumber : function(className){
+        var num;
+        this.propsdata.opt.forEach(function(v,i){
+          if(className.match(v) !== null) return num = i;
         });
-        return matchClass;
+        return num;
       },
       setClass : function(){
         // removeClassName
@@ -62,17 +59,15 @@
     background:url('../assets/hands.jpg')no-repeat;
     background-color:#fff;
   }
-  button:hover,
+  button:not([disabled]):hover,
   button:active,
   button.on{
     border-color:#333;
   }
-
-  /* 트랜지션으로 자연스럽게 나오게 만들기 Vue에 있나? */
-  button.hidden{
-    /* display:none; */
-  }
-  button span{display:block;position:relative;z-index:-1;}
+  button[disabled]{
+   cursor:default;
+  } 
+  /* button span{display:block;position:relative;z-index:-1;} */
   .rock{ 
     background-size:190px;
     background-position:14px -10px;

@@ -1,10 +1,13 @@
 <template>
-  <div class="hands" v-bind:class="{ on : !propsdata }"></div>
+  <div class="hands" v-bind:class="{ on : !this.propsdata }"></div>
 </template>
 
 <script>
   export default {
-    props:['propsdata']
+    props:['propsdata'],
+    data : {
+      randomNum : ''
+    }
   }
 </script>
 
@@ -19,6 +22,16 @@
   .hands.on{
     animation: animate .5s steps(3,end) infinite;
   }
+  .rock{
+    background-position:0 0;
+  }
+  .scissors{
+    background-position:-115px 0;
+  }
+  .paper{
+    background-position:-257px 0;
+  }
+
   @keyframes animate{
     0%{
       background-position-x:0;
