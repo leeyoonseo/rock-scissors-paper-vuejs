@@ -1,10 +1,10 @@
 <template>
-  <button v-on:click="onClick" v-bind:disabled="this.props.isReady" class="player" v-bind:class="this.className"><span>{{ setButtonText }}</span></button>
+  <button v-on:click="onClick" v-bind:disabled="this.data.isReady" class="player" v-bind:class="this.className"><span>{{ setButtonText }}</span></button>
 </template>
 
 <script>
   export default {
-    props : ['props'],
+    props : ['data'],
     data (){
       return{
         className : ''
@@ -13,7 +13,7 @@
     computed : {
       // 버튼 text 추가, this.className값 삽입하여 methods에서 사용
       setButtonText : function(){
-        this.className = this.props.opts[this.props.index];
+        this.className = this.data.opts[this.data.index];
         return this.className;
       }
     },
@@ -28,7 +28,7 @@
       // class와 match하는 값을 숫자로 return함, opts 선언한 인덱스 순서
       getPlayerNumber : function(){
         var className = this.className;
-        var opts = this.props.opts;
+        var opts = this.data.opts;
         var num;
 
         opts.forEach(function(v,i){

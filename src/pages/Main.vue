@@ -2,7 +2,7 @@
   <div class="wrap">
     <div class="game-board">
       <Computer v-bind:props="{isReady, computerClass}"></Computer>
-      <GameControlButton v-bind:propsdata="isReady" v-on:onClick="toggleIsReady"></GameControlButton>
+      <GameControlButton v-bind:props="isReady" v-on:onClick="toggleIsReady"></GameControlButton>
       <div class="options-wrap"><Player v-for="(opt, index) in opts" v-bind:props="{isReady, opts, index}" v-bind:key="`opt-${index}`" v-on:onClick="result"></Player></div>
     </div>
     <div class="score-board">
@@ -38,6 +38,7 @@
       var name = prompt('안녕하세요. \n이름을 입력해주세요.\n미 입력시 노출되지 않습니다.');
       this.userName = name;
     },
+    // '컴포넌트명' : import한 컴포넌트 
     components : {
       Computer,
       GameControlButton,
@@ -69,11 +70,11 @@
         }        
         this.computerClass = this.opts[randomNum];
       },
-      setScore : function(who){
-        if(who == 'win'){
+      setScore : function(result){
+        if(result == 'win'){
           this.count.win ++;
           this.count.continue ++;
-        }else if(who == 'lose'){
+        }else if(result == 'lose'){
           this.count.lose ++;
           this.count.continue = 0;
         }else{

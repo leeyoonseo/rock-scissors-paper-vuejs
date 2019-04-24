@@ -5,33 +5,33 @@
       <tbody>
         <tr>
           <td>유저 승</td>
-          <td>{{ this.props.count.win }} 번</td>
+          <td>{{ this.data.count.win }} 번</td>
         </tr>
         <tr>
           <td>무승부</td>
-          <td>{{ this.props.count.draw }} 번</td>
+          <td>{{ this.data.count.draw }} 번</td>
         </tr>
         <tr>
           <td>컴퓨터 승</td>
-          <td>{{ this.props.count.lose }} 번</td>
+          <td>{{ this.data.count.lose }} 번</td>
         </tr>
         <tr>
           <td>유저 연속 승리</td>
-          <td>{{ this.props.count.continue }} 번</td>
+          <td>{{ this.data.count.continue }} 번</td>
         </tr>
         <tr>
           <td>총 게임 횟수</td>
-          <td>{{ this.props.count.total }} 번</td>
+          <td>{{ this.data.count.total }} 번</td>
         </tr>
       </tbody>
     </table>    
-    <p class="resultTxt" v-if="this.props.isReady">{{ this.props.notiTxt }}</p>
+    <p class="resultTxt" v-if="this.data.isReady">{{ this.data.notiTxt }}</p>
   </div>
 </template>
 
 <script>
 export default {
-  props:['props'],
+  props:['data'],
   methods : {
     onClick : function(){
       this.$emit('onClick');

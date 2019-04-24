@@ -1,14 +1,14 @@
 <template>
-  <button v-on:click="onClick" v-bind:class="{ 'is-active' : this.propsdata }">{{ setButtonText }}</button>
+  <button v-on:click="onClick" v-bind:class="{ 'is-active' : this.data }">{{ setButtonText }}</button>
 </template>
 
 <script>
   export default {
-    props : ['propsdata'],
+    props : ['data'],
     computed : {
       // 버튼명 셋팅
       setButtonText : function(){
-        return (this.propsdata) ? 'Start' : 'Stop';
+        return (this.dat) ? 'Start' : 'Stop';
       }
     },
     methods : {

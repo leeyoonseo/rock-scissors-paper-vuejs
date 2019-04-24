@@ -1,10 +1,10 @@
 <template>
-  <div class="computer" v-bind:class="[ { 'is-active' : !this.props.isReady }, this.props.computerClass ]"></div>
+  <div class="computer" v-bind:class="[ { 'is-active' : !this.data.isReady }, this.data.computerClass ]"></div>
 </template>
 
 <script>
   export default {
-    props:['props']
+    props:['data']
   }
 </script>
 
