@@ -1,5 +1,5 @@
 <template>
-  <div class="hands" v-bind:class="[ { on : !this.props.isReady }, this.props.computer ]"></div>
+  <div class="computer" v-bind:class="[ { 'is-active' : !this.props.isReady }, this.props.computerClass ]"></div>
 </template>
 
 <script>
@@ -9,27 +9,27 @@
 </script>
 
 <style scoped>
-  .hands{
+  .computer{
     margin:0 auto;
     width:125px;
     height: 175px;
     background:url('../assets/hands.jpg')no-repeat;
     background-size:384px;
   }
-  .hands.on{
-    animation: animate .5s steps(3,end) infinite;
+  .computer.is-active{
+    animation: gameAnimate .5s steps(3,end) infinite;
   }
   .rock{
     background-position:0 0;
   }
   .scissors{
-    background-position:-115px 0;
+    background-position:-128px 0;
   }
   .paper{
     background-position:-257px 0;
   }
 
-  @keyframes animate{
+  @keyframes gameAnimate{
     0%{
       background-position-x:0;
     }
@@ -39,7 +39,3 @@
   } 
 </style>
 
-<!-- 
-  TODO
-  1.랜덤으로 가위, 바위, 보 뿌리기.
--->

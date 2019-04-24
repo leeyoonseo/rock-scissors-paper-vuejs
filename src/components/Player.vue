@@ -1,5 +1,5 @@
 <template>
-  <button v-on:click="onClick" v-bind:disabled="this.props.isReady" class="user-btn" v-bind:class="this.className"><span>{{ optValue }}</span></button>
+  <button v-on:click="onClick" v-bind:disabled="this.props.isReady" class="player" v-bind:class="this.className"><span>{{ setButtonText }}</span></button>
 </template>
 
 <script>
@@ -11,20 +11,22 @@
       }
     },
     computed : {
-      optValue : function(){
+      // 버튼 text 추가, this.className값 삽입하여 methods에서 사용
+      setButtonText : function(){
         this.className = this.props.opts[this.props.index];
         return this.className;
       }
     },
     methods : {
       onClick : function(){
-        var num = this.getOptNum();
+        var playerNumber = this.getPlayerNumber();
 
         // 선택한 값에 맞춰 opt에 맞는 number값 전달
-        this.$emit('onClick',num);
-        this.setClass();
+        this.$emit('onClick', playerNumber);
+        this.setActiveClassName();
       },
-      getOptNum : function(){
+      // class와 match하는 값을 숫자로 return함, opts 선언한 인덱스 순서
+      getPlayerNumber : function(){
         var className = this.className;
         var opts = this.props.opts;
         var num;
@@ -34,14 +36,15 @@
         });
         return num;
       },
-      setClass : function(){
-        // removeClassName
-        var userBtns = document.getElementsByClassName('user-btn');
-        for (var i = 0; i < userBtns.length; i++) {
-          userBtns[i].classList.remove('on');
+      // player 버튼에 클릭했을때, is-active 클래스 삽입
+      setActiveClassName : function(){
+        // remove
+        var player = document.getElementsByClassName('player');
+        for (var i = 0; i < player.length; i++) {
+          player[i].classList.remove('is-active');
         }
-        // addClassName
-        this.$el.classList.add('on');
+        // add
+        this.$el.classList.add('is-active');
       }
     }
   }
@@ -64,13 +67,14 @@
   }
   button:not([disabled]):hover,
   button:active,
-  button.on{
+  button.is-active{
     border-color:#333;
   }
   button[disabled]{
    cursor:default;
   } 
-  /* button span{display:block;position:relative;z-index:-1;} */
+  button span{display:block;position:relative;z-index:-1;}
+
   .rock{ 
     background-size:190px;
     background-position:14px -10px;

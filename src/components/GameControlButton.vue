@@ -1,16 +1,18 @@
 <template>
-  <button v-on:click="onClick" v-bind:class="{ on : this.propsdata }">{{ buttonText }}</button>
+  <button v-on:click="onClick" v-bind:class="{ 'is-active' : this.propsdata }">{{ setButtonText }}</button>
 </template>
 
 <script>
   export default {
     props : ['propsdata'],
     computed : {
-      buttonText : function(){
+      // 버튼명 셋팅
+      setButtonText : function(){
         return (this.propsdata) ? 'Start' : 'Stop';
       }
     },
     methods : {
+      // 클릭 시 게임 시작, 멈춤 이벤트 전달
       onClick : function(){
         this.$emit('onClick');
       }
@@ -32,8 +34,7 @@
     cursor:pointer;
     background-color:rgb(181, 216, 224);
   }
-  
-  button.on{
+  button.is-active{
     background-color:rgb(224, 181, 181);
   }
 </style>

@@ -1,89 +1,111 @@
 <template>
   <div class="wrap">
-    <div class="game-area">
-      <MainHands-component v-bind:props="{isReady, computer}"></MainHands-component>
-      <ControlBtn-component class="controls" v-bind:propsdata="isReady" v-on:onClick="gameStateToggle"></ControlBtn-component>
-      <div class="options-wrap">
-        <user-button-component v-for="(opt, index) in opts" v-bind:props="{isReady,opts,index}" v-bind:key="`opt-${index}`" v-on:onClick="result"></user-button-component>
-      </div>
+    <div class="game-board">
+      <computer-component v-bind:props="{isReady, computerClass}"></computer-component>
+      <game-control-component v-bind:propsdata="isReady" v-on:onClick="toggleIsReady"></game-control-component>
+      <div class="options-wrap"><player-component v-for="(opt, index) in opts" v-bind:props="{isReady,opts,index}" v-bind:key="`opt-${index}`" v-on:onClick="result"></player-component></div>
     </div>
     <div class="score-board">
-      <p> 승리횟수 : {{ win }}</p>
-      <p> 패배횟수 : {{ lose }}</p>
-      <p> 연속승리 : {{ continueScore }}</p>
-      <p> 총 게임 횟수 : {{ totalRound }}</p>
+      <score-board-component v-bind:props="{count, userName, notiTxt, isReady}" v-on:onClick="resetData"></score-board-component>
     </div>
   </div>
 </template>
-
 <script>
-  import MainHands from '../components/MainHands.vue';
-  import ControlBtn from '../components/ControlBtn.vue';
-  import userHands from '../components/UserHands.vue';
+  import Computer from '../components/Computer.vue';
+  import GameControlButton from '../components/GameControlButton.vue';
+  import Player from '../components/Player.vue';
+  import ScoreBoard from '../components/ScoreBoard.vue';
 
   export default {
     data(){
       return {
         isReady : true,
         opts : ['rock', 'scissors', 'paper'],
-        computer : '',
-        win : 0,
-        lose : 0,
-        continueScore : 0,
-        totalRound : 0
+        computerClass : '',
+        userName : '',
+        notiTxt : '',
+        count : {
+          win : 0,
+          draw : 0,
+          lose : 0,
+          continue : 0,
+          total : 0
+        }
       }
     },
+    created (){
+      var name = prompt('안녕하세요. \n이름을 입력해주세요.');
+      this.userName = name;
+    },
     components : {
-      'MainHands-component' : MainHands,
-      'ControlBtn-component' : ControlBtn,
-      'user-button-component' : userHands,
+      'computer-component' : Computer,
+      'game-control-component' : GameControlButton,
+      'player-component' : Player,
+      'score-board-component' : ScoreBoard
     },
     methods : {
-      gameStateToggle : function(){
+      // ready 상태 전환
+      toggleIsReady : function(){
         this.isReady = !this.isReady;
       },
+
+      // 게임 결과, player-component에서 호출
       result : function(userNum){
-        this.gameStateToggle();
+        this.toggleIsReady();
         // 1,2,3 중 랜덤 숫자 출력
         var randomNum = Math.floor(Math.random() * 3);
 
         // 0 주먹 1 가위 2 보
         if(userNum === randomNum){
-          console.log('비겼습니다.');
+          this.setScore('draw');
+          this.notiTxt = '무승부입니다.';
         }else if( (userNum == '0' && randomNum == '1') || (userNum == '1' && randomNum == '2') || (userNum == '2' && randomNum == '0')){
-          console.log('유저 WIN!');
-          this.setScore('user');
+          this.setScore('win');
+          this.notiTxt = '유저가 이겼습니다.';
         }else{
-          console.log('컴퓨터 WIN!');
-          this.setScore('computer');
-        }
-        this.computer = this.opts[randomNum];
+          this.setScore('lose');
+          this.notiTxt = '유저가 졌습니다.';
+        }        
+        this.computerClass = this.opts[randomNum];
       },
       setScore : function(who){
-        if(who == 'user'){
-          this.win ++;
-          this.continueScore ++;
+        if(who == 'win'){
+          this.count.win ++;
+          this.count.continue ++;
+        }else if(who == 'lose'){
+          this.count.lose ++;
+          this.count.continue = 0;
         }else{
-          this.lose ++;
-          this.continueScore = 0;
+          this.count.draw ++;
         }
-        this.totalRound ++;
+        this.count.total ++;
       },
-      // result : function(userNum){
-        
-      // }
+      resetData : function(){
+        this.count.win = 0;
+        this.count.lose = 0;
+        this.count.draw = 0;
+        this.count.continue = 0;
+        this.count.total = 0;
+      }
     }
   }
 </script>
 
 <style scoped>
-  .wrap{ margin:0 auto; width:700px; }
-  .game-area{
-    width:500px; 
+  .wrap{ 
+    margin:50px auto; 
+    padding:20px;
+    overflow:hidden;
+    width:700px; 
+    border:1px solid #ccc;
+    border-radius:15px;
+  }
+  .game-board{
+    width:400px; 
     float:left;
   }
   .score-board{
-    width:200px;
+    width:300px;
     float:left;
   }
   .options-wrap{
@@ -92,3 +114,4 @@
     width:360px;
   }
 </style>
+
