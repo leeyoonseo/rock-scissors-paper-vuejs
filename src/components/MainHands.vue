@@ -1,13 +1,10 @@
 <template>
-  <div class="hands" v-bind:class="{ on : !this.propsdata }"></div>
+  <div class="hands" v-bind:class="[ { on : !this.props.isReady }, this.props.computer ]"></div>
 </template>
 
 <script>
   export default {
-    props:['propsdata'],
-    data : {
-      randomNum : ''
-    }
+    props:['props']
   }
 </script>
 

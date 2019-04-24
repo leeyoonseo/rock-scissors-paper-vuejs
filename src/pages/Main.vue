@@ -1,97 +1,66 @@
 <template>
   <div class="wrap">
-    <MainHands-component v-bind:propsdata="isReady"></MainHands-component>
-    <ControlBtn-component class="controls" v-bind:propsdata="isReady" v-on:onClick="gameStateToggle"></ControlBtn-component>
-    <div class="options-wrap">
-      <!-- TODO 반복문으로 생성 할 수 있을듯???. -->
-      <userHands-component v-bind:class="{opt}" v-for="opt in handsOpts" v-bind:props="isReady"></userHands-component>
-
-      <!-- <RockHand-component class="user rock" v-bind:propsdata="{isReady,opt}" v-on:onClick="compareResult"></RockHand-component>
-
-
-      <ScissorsHand-component class="user scissors" v-bind:propsdata="{isReady,opt}" v-on:onClick="compareResult"></ScissorsHand-component>
-      <PaperHand-component class="user paper" v-bind:propsdata="{isReady,opt}" v-on:onClick="compareResult"></PaperHand-component> -->
+    <div class="game-area">
+      <MainHands-component v-bind:props="{isReady, computer}"></MainHands-component>
+      <ControlBtn-component class="controls" v-bind:propsdata="isReady" v-on:onClick="gameStateToggle"></ControlBtn-component>
+      <div class="options-wrap">
+        <user-button-component v-for="(opt, index) in opts" v-bind:props="{isReady,opts,index}" v-bind:key="`opt-${index}`" v-on:onClick="result"></user-button-component>
+      </div>
+    </div>
+    <div class="score-board">
+      <p> 승리횟수 : {{ win }}</p>
+      <p> 패배횟수 : {{ lose }}</p>
+      <p> 연속승리 : {{ continueScore }}</p>
+      <p> 총 게임 횟수 : {{ totalRound }}</p>
     </div>
   </div>
-
 </template>
 
 <script>
   import MainHands from '../components/MainHands.vue';
   import ControlBtn from '../components/ControlBtn.vue';
-
   import userHands from '../components/UserHands.vue';
-
-
-  // TODO import 도 하나로 해서 쓸 수 있나?
-  import Rock from '../components/UserHands.vue';
-  import Scissors from '../components/UserHands.vue';
-  import Paper from '../components/UserHands.vue';
 
   export default {
     data(){
       return {
         isReady : true,
-        // 이거 이용해서 반복문 돌려서 component 하나로 할 수 있을까?
-        // 이거로 random 결과 내기
-        opt : ['rock', 'scissors', 'paper'],
-        handsOpts : ['rock', 'scissors', 'paper'],
+        opts : ['rock', 'scissors', 'paper'],
+        computer : '',
         win : 0,
         lose : 0,
         continueScore : 0,
         totalRound : 0
-
-        // userHand : ''
       }
     },
     components : {
       'MainHands-component' : MainHands,
       'ControlBtn-component' : ControlBtn,
-      'RockHand-component' : Rock,
-      'ScissorsHand-component' : Scissors,
-      'PaperHand-component' : Paper,
-
-      'userHands-component' : userHands,
+      'user-button-component' : userHands,
     },
     methods : {
       gameStateToggle : function(){
         this.isReady = !this.isReady;
       },
-      setComputerHand : function(){
-        
-      },
-      compareResult : function(userNum){
+      result : function(userNum){
         this.gameStateToggle();
-
         // 1,2,3 중 랜덤 숫자 출력
         var randomNum = Math.floor(Math.random() * 3);
-        setClass(randomNum);
 
-
+        // 0 주먹 1 가위 2 보
         if(userNum === randomNum){
-          console.log('비겼다');
-        }else if( (this.opt[userNum] == 'rock' && this.opt[randomNum] == 'scissors') 
-                ||(this.opt[userNum] == 'scissors' && this.opt[randomNum] == 'paper')
-                ||(this.opt[userNum] == 'paper' && this.opt[randomNum] == 'rock')){
-          console.log('user가 이겼습니다.');
-          this.setScore(true);
+          console.log('비겼습니다.');
+        }else if( (userNum == '0' && randomNum == '1') || (userNum == '1' && randomNum == '2') || (userNum == '2' && randomNum == '0')){
+          console.log('유저 WIN!');
+          this.setScore('user');
         }else{
-          console.log('computer가 이겼습니다.');
-          this.setScore(false);
+          console.log('컴퓨터 WIN!');
+          this.setScore('computer');
         }
+        this.computer = this.opts[randomNum];
       },
-      setClass : function(randomNum){
-        // removeClassName
-        var computerHand = document.querySelector('.hands');
-        for (var i = 0; i < this.opt.length; i++) {
-          computerHand[i].classList.remove(opt[i]);
-        }
-        
-        // addClassName
-        computerHandclassList.add(opt[randomNum]);
-      },
-      setScore : function(result){
-        if(result){
+      setScore : function(who){
+        if(who == 'user'){
           this.win ++;
           this.continueScore ++;
         }else{
@@ -100,17 +69,22 @@
         }
         this.totalRound ++;
       },
-      result : function(userNum){
+      // result : function(userNum){
         
-      }
+      // }
     }
   }
 </script>
 
 <style scoped>
-  .wrap{
-    margin:0 auto;
+  .wrap{ margin:0 auto; width:700px; }
+  .game-area{
     width:500px; 
+    float:left;
+  }
+  .score-board{
+    width:200px;
+    float:left;
   }
   .options-wrap{
     overflow:hidden;

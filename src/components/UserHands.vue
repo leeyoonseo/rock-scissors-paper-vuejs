@@ -1,5 +1,5 @@
 <template>
-  <button v-on:click="onClick" v-bind:disabled="this.props.isReady"><span>{{ className }}</span></button>
+  <button v-on:click="onClick" v-bind:disabled="this.props.isReady" class="user-btn" v-bind:class="this.className"><span>{{ optValue }}</span></button>
 </template>
 
 <script>
@@ -7,36 +7,39 @@
     props : ['props'],
     data (){
       return{
-        className : '컴포넌트 호출 시 상위에서 class를 지정해주세요. rock, scissors, paper 가능합니다.'
+        className : ''
       }
     },
-    // lifeCycle : DOM 삽입 단계, 초기 랜더링 직전에 컴포넌트(컴포넌트, 템플릿, 렌더링 된 돔)에 접근할 수 있다. 
-    // 모든 하위 컴포넌트가 마운트 상태를 보장하지 않는다. 
-    // 서버렌더링에서는 호출되지 않는다.
-    mounted : function(){
-      var className = this.$el.className;
-      this.className = (className) ? className : console.log(this.className);
+    computed : {
+      optValue : function(){
+        this.className = this.props.opts[this.props.index];
+        return this.className;
+      }
     },
     methods : {
       onClick : function(){
+        var num = this.getOptNum();
+
         // 선택한 값에 맞춰 opt에 맞는 number값 전달
-        this.$emit('onClick',this.matchOptNumber(this.className));
+        this.$emit('onClick',num);
         this.setClass();
       },
-      matchOptNumber : function(className){
+      getOptNum : function(){
+        var className = this.className;
+        var opts = this.props.opts;
         var num;
-        this.propsdata.opt.forEach(function(v,i){
+
+        opts.forEach(function(v,i){
           if(className.match(v) !== null) return num = i;
         });
         return num;
       },
       setClass : function(){
         // removeClassName
-        var userBtns = document.getElementsByClassName('user');
+        var userBtns = document.getElementsByClassName('user-btn');
         for (var i = 0; i < userBtns.length; i++) {
           userBtns[i].classList.remove('on');
         }
-        
         // addClassName
         this.$el.classList.add('on');
       }

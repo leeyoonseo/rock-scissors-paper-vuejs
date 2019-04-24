@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <Main-page></Main-page>
+    <Main-component></Main-component>
   </div>
 </template>
 
@@ -9,7 +9,7 @@
 
   export default {
     components : {
-      'Main-page' : Main
+      'Main-component' : Main
     }
   }
 </script>
