@@ -1,23 +1,22 @@
 <template>
   <div class="score-board-wrap">
-    <button class="reset" v-on:click="onClick">기록삭제</button>
-    <p class="welcomeTxt" v-if="this.props.userName">{{ this.props.userName }} 님, 안녕하세요</p>    
+    <button class="reset" v-on:click="onClick">기록삭제</button>     
     <table>
       <tbody>
         <tr>
-          <td>이겼다</td>
+          <td>유저 승</td>
           <td>{{ this.props.count.win }} 번</td>
         </tr>
         <tr>
-          <td>비겼다</td>
+          <td>무승부</td>
           <td>{{ this.props.count.draw }} 번</td>
         </tr>
         <tr>
-          <td>졌다</td>
+          <td>컴퓨터 승</td>
           <td>{{ this.props.count.lose }} 번</td>
         </tr>
         <tr>
-          <td>연속 승리</td>
+          <td>유저 연속 승리</td>
           <td>{{ this.props.count.continue }} 번</td>
         </tr>
         <tr>
@@ -44,10 +43,7 @@ export default {
 <style scoped>
   .score-board-wrap{
     text-align:right;
-  }
-  .welcomeTxt{
-    font-size:12px;
-  }
+  } 
   .resultTxt{
     text-align:center;
     color:red;

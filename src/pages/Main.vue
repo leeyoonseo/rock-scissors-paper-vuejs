@@ -1,12 +1,13 @@
 <template>
   <div class="wrap">
     <div class="game-board">
-      <computer-component v-bind:props="{isReady, computerClass}"></computer-component>
-      <game-control-component v-bind:propsdata="isReady" v-on:onClick="toggleIsReady"></game-control-component>
-      <div class="options-wrap"><player-component v-for="(opt, index) in opts" v-bind:props="{isReady,opts,index}" v-bind:key="`opt-${index}`" v-on:onClick="result"></player-component></div>
+      <Computer v-bind:props="{isReady, computerClass}"></Computer>
+      <GameControlButton v-bind:propsdata="isReady" v-on:onClick="toggleIsReady"></GameControlButton>
+      <div class="options-wrap"><Player v-for="(opt, index) in opts" v-bind:props="{isReady, opts, index}" v-bind:key="`opt-${index}`" v-on:onClick="result"></Player></div>
     </div>
     <div class="score-board">
-      <score-board-component v-bind:props="{count, userName, notiTxt, isReady}" v-on:onClick="resetData"></score-board-component>
+      <p class="welcomeTxt" v-if="this.userName">{{ this.userName }} 님, 안녕하세요</p>   
+      <ScoreBoard v-bind:props="{count, notiTxt, isReady}" v-on:onClick="resetData"></ScoreBoard>
     </div>
   </div>
 </template>
@@ -34,14 +35,14 @@
       }
     },
     created (){
-      var name = prompt('안녕하세요. \n이름을 입력해주세요.');
+      var name = prompt('안녕하세요. \n이름을 입력해주세요.\n미 입력시 노출되지 않습니다.');
       this.userName = name;
     },
     components : {
-      'computer-component' : Computer,
-      'game-control-component' : GameControlButton,
-      'player-component' : Player,
-      'score-board-component' : ScoreBoard
+      Computer,
+      GameControlButton,
+      Player,
+      ScoreBoard
     },
     methods : {
       // ready 상태 전환
@@ -64,7 +65,7 @@
           this.notiTxt = '유저가 이겼습니다.';
         }else{
           this.setScore('lose');
-          this.notiTxt = '유저가 졌습니다.';
+          this.notiTxt = '컴퓨터가 이겼습니다.';
         }        
         this.computerClass = this.opts[randomNum];
       },
@@ -91,7 +92,7 @@
   }
 </script>
 
-<style scoped>
+<style scoped> 
   .wrap{ 
     margin:50px auto; 
     padding:20px;
@@ -112,6 +113,10 @@
     overflow:hidden;
     margin:0 auto;
     width:360px;
+  }
+   .welcomeTxt{
+    font-size:12px;
+    text-align:right;
   }
 </style>
 
