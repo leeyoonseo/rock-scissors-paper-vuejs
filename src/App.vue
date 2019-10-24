@@ -1,28 +1,57 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+      <router-view :nicName="nicName" @onChangeNicName="onChange"></router-view>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+    export default {
+        name: 'app',
 
-export default {
-  name: 'app',
-  components: {
-    HelloWorld
-  }
-}
+        data(){
+            return{
+                nicName : ''
+            }
+        },
+
+        watch : {
+            nicName(newNicName){
+                localStorage.setItem('nicName', newNicName);
+            }
+        },
+
+        created(){
+            const nicName = localStorage.getItem('nicName');
+
+            if(nicName === ''){
+                this.nicName = this.getRandomNicName();
+
+            }else{
+                this.nicName = nicName;
+            }
+        },
+
+        methods : {           
+            getRandomNicName(){
+                const random = getRandomNum(6); // n으로 숫자 갯수 조절
+                const nicName = `user${random}`;
+                
+                return nicName;
+                
+                function getRandomNum(n){
+                    let num = '';
+
+                    for(let i = 0; i < n; i++){
+                        num += Math.floor(Math.random() * 10);
+                    }
+
+                    return num
+                }
+            },
+            
+            onChange(newNicName){
+                this.nicName = newNicName;
+            }
+        }
+    }
 </script>
-
-<style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>
