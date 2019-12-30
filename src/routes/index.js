@@ -2,7 +2,7 @@ import Vue from 'vue';
 import Router from 'vue-router';
 import TheMain from '../views/TheMain.vue';
 import TheGameBoard from '../views/TheGameBoard.vue';
-import TheUserHistory from '../views/TheUserHistory.vue';
+import TheMyPage from '../views/TheMyPage.vue';
 
 Vue.use(Router);
 
@@ -20,9 +20,9 @@ export const router = new Router({
             component : TheGameBoard
         },
         { 
-            name : 'TheUserHistory',
-            path : '/history',
-            component : TheUserHistory
+            name : 'TheMyPage',
+            path : '/mypage',
+            component : TheMyPage
         },
 
     ]

@@ -1,15 +1,18 @@
 <template>
-  <div>      
-      <p>{{ nicName }}</p>
-      <div>
-          <default-button @defaultButtonClick="onClick">
-              game
-          </default-button>
-          <default-button @defaultButtonClick="onChangeNicName">
-              nicName
-          </default-button>
-      </div>
-  </div>
+    <div>      
+        <div @show="nicName">
+            {{ nicName }}님 환영합니다.
+        </div>
+
+        <div>
+            <default-button @defaultButtonClick="goGameStartPage">
+                게임시작
+            </default-button>
+            <default-button @defaultButtonClick="goMypage">
+                닉네임변경
+            </default-button>
+        </div>
+    </div>
 </template>
 
 <script>
@@ -27,12 +30,12 @@ export default {
     },
     
     methods : {
-        onClick(){
+        goGameStartPage(){
             this.$router.push('/game');
         },
 
-        onChangeNicName(){
-            this.$router.push('/history');
+        goMypage(){
+            this.$router.push('/mypage');
         }
     }
 }

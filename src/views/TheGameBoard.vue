@@ -1,32 +1,42 @@
 <template>
     <div class="wrap">
-        <p>{{ nicName }}</p>
+        <p>{{ nicName }}님</p>
         <div calss="noti-text">
             {{ notiText }}
         </div>
         <div class="game-board">
-            <gamer-computer :isReady="isReady" 
-                            :computer="computer"
-            ></gamer-computer>
+            <gamer-computer 
+                :isReady="isReady" 
+                :computer="computer"
+            />
 
-            <gamer-player :isReady="isReady" 
-                          :shape="shape" 
-                          @onClickUserHand="onSelect"
-            ></gamer-player>
+            <gamer-player 
+                :isReady="isReady" 
+                :shape="shape" 
+                @onClickUserHand="handlerChoose"
+            />
         </div>
 
         <div class="options-wrap">
-            <default-button :class="'default-button__start'" 
-                            :isReady="isReady" 
-                            @defaultButtonClick="onResume"
+            <default-button 
+                :class="'default-button__start'" 
+                :isReady="isReady" 
+                @defaultButtonClick="handlerReady"
             >  
-                {{ isReady ? 'Start' : 'Stop' }}
+                {{ 
+                    isReady 
+                        ? '시작' 
+                        : '정지' 
+                }}
             </default-button>
         </div>
 
         <div class="score-board">
             <the-score-board>
-                {{ score }}
+                총 점수 : {{ score.total }}
+                무승부 : {{ score.tie }}
+                승리 : {{ score.win }}
+                패배 : {{ score.lose }}
             </the-score-board>
         </div>
     </div>
@@ -51,7 +61,12 @@
             return{
                 isReady : true,
                 computer : '',
-                score : 0,
+                score : {
+                    total : 0,
+                    tie : 0,
+                    win : 0,
+                    lose : 0,
+                },
                 notiText : '',
                 shape : [ 
                     {
@@ -75,112 +90,103 @@
             GamerPlayer,
             DefaultButton,
             TheScoreBoard
-        },
-        
-        mounted(){
-        },
+        },        
 
         methods : {
-            onResume(){
+            handlerReady(){
                 this.isReady = !this.isReady;
             },
             
-            onSelect(e){
-                const user = this.getSelectedUser(e)[0];
-                const computer = this.getSelectedComputer();
+            handlerChoose(e){
+                const userHand = getUserChoosed.call(this,e);
+                const computerHand = getComputerChoosed.call(this);
 
-                this.onResult(user.key, computer.key);
+                this.handlerGameStart(userHand.key, computerHand.key);
+
+                // 유저
+                function getUserChoosed(e){
+                    const selectedClass = e.getAttribute('class');
+                    return this.shape.filter((e) => {
+                        return selectedClass.match(e.value);
+                    })[0];
+                }
+
+                // 랜덤 컴퓨터
+                function getComputerChoosed(){
+                    let random = Math.floor(Math.random() * 3);
+
+                    random = this.shape[random];
+                    this.computer = random.value;
+
+                    return random;
+                }
             },
 
-            onResult(user, computer){
-                this.gameCore(user, computer);
+            handlerGameStart(user, computer){
+                this.setGameLogic(user, computer);
+                
                 this.isReady = true;
             },
-
-            gameCore(user, computer){
-
-                // 묵0. 찌1. 빠2
-                if(user === computer){
-                    sameResult.call(this);
+            
+            setGameLogic(userHand, computerHand){
+                if(userHand === computerHand){
+                    this.score.tie++;
+                    this.notiText = '무승부';
                     
                 }else{
-                    diffResult.call(this);
-                    totalScore.call(this);
+                    let resultText = '';
 
-                }
-
-                function sameResult(){
-                    this.notiText = `무승부`;
-                }
-
-                function diffResult(){
-                    let result = '';
-
-                    if(user === 0){
-                        switch(computer){
-                            case 1 : this.score++;
-                                     result = '승리';
+                    // 묵0. 찌1. 빠2
+                    if(userHand === 0){
+                        switch(computerHand){
+                            case 1 : this.score.total++;
+                                     this.score.win++;
+                                     resultText = '승리';
                                      break;   
-                            case 2 : this.score--;
-                                     result = '패배';
+                            case 2 : this.score.total--;
+                                     this.score.lose++;
+                                     resultText = '패배';
                                      break;   
-                            default : console.log(user, computer);
+                            default : console.log(userHand, computerHand);
                                      break;   
                         } // switch
 
-                    }else if(user === 1){
-                        switch(computer){
-                            case 0 : this.score--;
-                                     result = '패배';
+                    }else if(userHand === 1){
+                        switch(computerHand){
+                            case 0 : this.score.total--;
+                                     this.score.lose++;
+                                     resultText = '패배';
                                      break;   
-                            case 2 : this.score++;
-                                     result = '승리';
+                            case 2 : this.score.total++;
+                                     this.score.win++;
+                                     resultText = '승리';
                                      break;   
-                            default : console.log(user, computer);
+                            default : console.log(userHand, computerHand);
                                      break;   
                         } // switch
 
-                    }else if(user === 2){
-                        switch(computer){
-                            case 0 : this.score++;
-                                     result = '승리';
+                    }else if(userHand === 2){
+                        switch(computerHand){
+                            case 0 : this.score.total++;
+                                     this.score.win++;
+                                     resultText = '승리';
                                      break;   
-                            case 1 : this.score--;
-                                     result = '패배';
+                            case 1 : this.score.total--;
+                                     this.score.lose++;
+                                     resultText = '패배';
                                      break;   
-                            default : console.log(user, computer);
+                            default : console.log(userHand, computerHand);
                                      break;   
                         } // switch
                     }
 
-                    this.notiText = `${result}`;
+                    this.notiText = resultText;
 
-                } // diffResult
-
-                function totalScore(){
-                    if(this.score < 0){
-                        this.score = 0;
+                    if(this.score.total < 0){
+                        this.score.total = 0;
                     }
                 }
-
-            },
-
-            getSelectedUser(e){
-                const selectedClass = e.getAttribute('class');
-                return this.shape.filter((e) => {
-                    return selectedClass.match(e.value);
-                });
-            },
-
-            getSelectedComputer(){
-                let random = Math.floor(Math.random() * 3);
-
-                random = this.shape[random];
-                this.computer = random.value;
-
-                return random;
             }
-
         }
 
     }

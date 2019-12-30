@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-      <router-view :nicName="nicName" @onChangeNicName="onChange"></router-view>
+      <router-view :nicName="nicName" @onChangeNicName="onChangeNicName"></router-view>
   </div>
 </template>
 
@@ -23,33 +23,23 @@
         created(){
             const nicName = localStorage.getItem('nicName');
 
-            if(nicName === ''){
-                this.nicName = this.getRandomNicName();
-
-            }else{
-                this.nicName = nicName;
-            }
+            this.nicName = (nicName === '' || nicName === 'null') 
+                ? this.getRandomNicName(6) 
+                : nicName;
         },
 
         methods : {           
-            getRandomNicName(){
-                const random = getRandomNum(6); // n으로 숫자 갯수 조절
-                const nicName = `user${random}`;
-                
-                return nicName;
-                
-                function getRandomNum(n){
-                    let num = '';
+            getRandomNicName(maxNum){
+                let randomNum = '';
 
-                    for(let i = 0; i < n; i++){
-                        num += Math.floor(Math.random() * 10);
-                    }
-
-                    return num
+                for(let i = 0; i < maxNum; i++){
+                    randomNum += Math.floor(Math.random() * 10);
                 }
+
+                return `user${randomNum}`;
             },
             
-            onChange(newNicName){
+            onChangeNicName(newNicName){
                 this.nicName = newNicName;
             }
         }
