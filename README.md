@@ -1,4 +1,4 @@
-# rock-scissors-paper-vuejs
+# rsp_game-vuejs
 
 ## Project setup
 ```
