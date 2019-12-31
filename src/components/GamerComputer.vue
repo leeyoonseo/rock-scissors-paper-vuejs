@@ -1,7 +1,5 @@
 <template>
-    <div :class="['gamer-computer', isReady ? '' : 'on', computer]">
-        Computer
-    </div>
+    <div :class="['gamer-computer', isReady ? '' : 'on', computer]"></div>
 </template>
 
 <script>
