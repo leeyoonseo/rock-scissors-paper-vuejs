@@ -1,20 +1,33 @@
 <template>
-    <div :class="['gamer-computer', isReady ? '' : 'on', computer]"></div>
+    <div 
+        :class="[
+            'gamer-computer', 
+            isGameReady ? 'on' : '', 
+            result.computerHand.value
+        ]"
+    >
+    </div>
 </template>
 
 <script>
     export default {
         name : 'GamerComputer',
         props : {
-            isReady : Boolean,
-            computer : String
+            isGameReady : {
+                type : Boolean,
+                required : true
+            },
+            result : {
+                type : Object,
+                required : true
+            }
         },
     }
 </script>
 
 <style scoped>
     .gamer-computer{
-        margin:0 auto;
+        margin:0 auto 30px;
         width:125px;
         height: 175px;
         background:url('../assets/img/hands.jpg')no-repeat;

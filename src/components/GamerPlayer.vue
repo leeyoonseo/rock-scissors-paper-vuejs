@@ -6,39 +6,29 @@
         >
             <template v-slot:activator="{ on }">
                 <v-btn
-                    class="default-button"
                     :class="`default-button__${li.value}`"
+                    ref="player"
+                    @click.stop="handlerUserHandChoose"
+                    text
+                    outlined
+                    fab
+                    class="default-button"
                     v-on="on"
+                    :disabled="!isGameReady"
+                    :data-shape="li.value"
                 >
                     <span class="default-button__title">{{ li.value }}</span>
                 </v-btn>
             </template>
             <span>{{ li.value }}</span>
         </v-tooltip>
-
-        
-
-                    <!-- class="default-button"
-            :class="`default-button__${li.value}`" 
-            
-            :disabled="isGameReady" 
-            @defaultButtonClick="onClick" -->
-            <!-- <span class="default-button__title">{{ li.value }}</span> -->
-        <!-- <default-button class="default-button"
-                        v-for="(li, i) in shape" 
-                        :class="`default-button__${li.value}`" 
-                        :key="i" :disabled="isReady" 
-                        @defaultButtonClick="onClick"
-        >
-            <span class="default-button__title">{{ li.value }}</span>
-        </default-button> -->
     </div>
 </template>
 
 <script>
-    // import DefaultButton from '../components/DefaultButton.vue';
-
     export default {
+        name : 'GamerPlayer',
+
         props : {
             isGameReady : Boolean,
             shape : Array
@@ -50,46 +40,33 @@
 
         
         methods : {
-            onClick(e){
-                this.$emit('onClickUserHand', e);
+            handlerUserHandChoose(e){
+                this.$emit('handlerUserHandChoose', e);
             }
         }
     }
 </script>
 
 <style scoped>  
-    /* .gamer_player_wrap{
+    .gamer_player_wrap{
+        margin-bottom:30px;
+        display:inline-block;
         overflow:hidden;
-    } */
-    .gamer_player_wrap:after{
-        display:block;
-        content:'';
-        clear:both;
     }
-
     .default-button{
         display:block; 
         padding:0;
         margin:0 20px;
-        width:80px;
-        height:80px;
+        width:80px !important;
+        height:80px !important;
         float:left;
         cursor:pointer;    
-        border:1px solid #ccc;
         box-sizing:border-box;
-        border-radius:50%;
-        background:url('../assets/img/hands.jpg')no-repeat;
-        background-color:#fff;
+        background:#fff url('../assets/img/hands.jpg')no-repeat;
     }
-
-    .default-button:not([disabled]):hover,
-    .default-button:active,
-    .default-button.on{
-        border-color:#333;
+    .default-button:hover{
+        border:1px solid #1976d2 !important; 
     }
-    .default-button[disabled]{
-        cursor:default;
-    } 
     .default-button__title{display:block;position:relative;z-index:-1;}
 
     .default-button__rock{ 

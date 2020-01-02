@@ -17,6 +17,8 @@
                         small
                         color="primary"
                         v-on="on"
+                        :loading="isRandomLoading"
+                        :disabled="isRandomLoading"
                         @click="handlerSetNewNicName"
                     >
                         <v-icon>
@@ -35,6 +37,8 @@
                         small
                         color="primary"
                         v-on="on"
+                        :loading="isSaveLoading"
+                        :disabled="isSaveLoading"
                         @click="handlerSaveNicName"
 
                     >
@@ -65,15 +69,32 @@ export default {
         }
     },
 
+    data : () => ({
+        isRandomLoading : false,
+        isSaveLoading : false
+    }),
+
     methods : {
         // 랜덤 닉네임 생성 
         handlerSetNewNicName(){
-            this.$emit('handlerSetNewNicName');
+            this.isRandomLoading = true;
+
+            setTimeout(() => {
+               this.isRandomLoading = false;
+               this.$emit('handlerSetNewNicName');
+
+            }, 500);
         },
 
         // 닉네임 저장
         handlerSaveNicName(){
-            this.$emit('handlerSaveNewNicName');
+            this.isSaveLoading = true;
+
+            setTimeout(() => {
+               this.isSaveLoading = false;
+               this.$emit('handlerSaveNewNicName');
+
+            }, 500);
         },
     }
 }

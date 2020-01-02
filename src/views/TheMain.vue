@@ -63,7 +63,9 @@
 
                 <!-- step 2 : 게임 -->
                 <div v-show="step === 2">
-                    <the-step-game />
+                    <the-step-game
+                        :step="step"
+                    />
                 </div>
                 <!-- // step 2 -->
                 
@@ -83,7 +85,11 @@
                                 }}
                             </v-btn>
                         </template>
-                        <span>게임하기</span>
+                        <span>
+                            {{
+                                step === 0 ? '게임하기...' : '나가기...' 
+                            }}
+                        </span>
                     </v-tooltip>
                 </v-card-actions>
             </v-card>
@@ -122,7 +128,7 @@ export default {
         // 0 : 메인
         // 1 : 닉네임 수정
         // 2 : 게임
-        step : 2,
+        step : 0,
 
         myIcons : {
             account : mdiAccount,
@@ -182,8 +188,6 @@ export default {
         handlerSetNewNicName(){
             this.newNicName = this.getRandomNicName();
         },
-
-
 
         // 스텝
         stepChangeEditContent(){

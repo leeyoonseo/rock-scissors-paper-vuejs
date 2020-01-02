@@ -5,6 +5,10 @@
 </template>
 
 <script>
+/*
+    [TODO] 다국어 v18n 파일 만들어서 진행해보기
+
+*/
     import TheMain from './views/TheMain';
 
     export default {
