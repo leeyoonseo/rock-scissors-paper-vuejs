@@ -2,7 +2,7 @@
     <v-card-text class="font-weight-bold body-1" align="center">
         <div>
             <v-text-field 
-                v-model="newNicName"
+                v-model="newUserName"
                 required
             >
             </v-text-field>
@@ -17,9 +17,9 @@
                         small
                         color="primary"
                         v-on="on"
-                        :loading="isRandomLoading"
-                        :disabled="isRandomLoading"
-                        @click="handlerSetNewNicName"
+                        :loading="isRefreshLoading"
+                        :disabled="isRefreshLoading"
+                        @click="handlerRefresh"
                     >
                         <v-icon>
                             mdi-cached
@@ -39,11 +39,10 @@
                         v-on="on"
                         :loading="isSaveLoading"
                         :disabled="isSaveLoading"
-                        @click="handlerSaveNicName"
-
+                        @click="handlerSave"
                     >
                         <v-icon>
-                            {{ myIcons.check }}
+                            mdi-check
                         </v-icon>
                     </v-btn>
                 </template>
@@ -58,44 +57,46 @@ export default {
     name : 'TheStepMyPage',
 
     props : {
-        myIcons : {
-            type : Object,
-            required : true
-        },
-
-        newNicName : {
+        newUserName : {
             type : String,
             required : true
         }
     },
 
     data : () => ({
-        isRandomLoading : false,
+        isRefreshLoading : false,
         isSaveLoading : false
     }),
 
     methods : {
-        // 랜덤 닉네임 생성 
-        handlerSetNewNicName(){
-            this.isRandomLoading = true;
 
-            setTimeout(() => {
-               this.isRandomLoading = false;
-               this.$emit('handlerSetNewNicName');
-
-            }, 500);
-        },
-
-        // 닉네임 저장
-        handlerSaveNicName(){
+        // 새로운 유저이름 저장
+        handlerSave(){
             this.isSaveLoading = true;
-
+            
             setTimeout(() => {
-               this.isSaveLoading = false;
-               this.$emit('handlerSaveNewNicName');
-
+                this.isSaveLoading = false;
+                this.emitSaveNewUserName();
             }, 500);
         },
+
+        emitSaveNewUserName(){
+            this.$emit('onSave');
+        },
+
+        // 랜덤 유저 이름릭
+        handlerRefresh(){
+            this.isRefreshLoading = true;
+            
+            setTimeout(() => {
+                this.isRefreshLoading = false;
+                this.emitRefreshUserName();
+            }, 500);
+        },
+
+        emitRefreshUserName(){
+            this.$emit('onRefresh');
+        }
     }
 }
 </script>

@@ -1,9 +1,9 @@
 <template>
-    <div 
+    <div
+        class="computer__hand" 
         :class="[
-            'gamer-computer', 
-            isGameReady ? 'on' : '', 
-            result.computerHand.value
+            isGameStart ? 'on' : '', 
+            gameResult.computerHand.value
         ]"
     >
     </div>
@@ -11,13 +11,14 @@
 
 <script>
     export default {
-        name : 'GamerComputer',
+        name : 'TheComputerHand',
         props : {
-            isGameReady : {
+            isGameStart : {
                 type : Boolean,
                 required : true
             },
-            result : {
+
+            gameResult : {
                 type : Object,
                 required : true
             }
@@ -26,26 +27,31 @@
 </script>
 
 <style scoped>
-    .gamer-computer{
+    .computer__hand{
         margin:0 auto 30px;
         width:125px;
         height: 175px;
         background:url('../assets/img/hands.jpg')no-repeat;
         background-size:384px;
     }
-    .gamer-computer.on{
-        animation: gameAnimate .5s steps(3,end) infinite;
+
+    .computer__hand.on{
+        animation: handAni .5s steps(3, end) infinite;
     }
-    .gamer-computer.rock{
+
+    .computer__hand.rock{
         background-position:0 0;
     }
-    .gamer-computer.scissors{
+
+    .computer__hand.scissors{
         background-position:-128px 0;
     }
-    .gamer-computer.paper{
+
+    .computer__hand.paper{
         background-position:-257px 0;
     }
-    @keyframes gameAnimate{
+
+    @keyframes handAni{
         0%{
             background-position-x:0;
         }

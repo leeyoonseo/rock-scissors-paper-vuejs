@@ -1,23 +1,26 @@
 <template>
-    <div class="gamer_player_wrap">
-        <v-tooltip bottom
+    <div class="player__hand__wrap">
+        <v-tooltip 
+            bottom
             v-for="(li, i) in shape" 
             :key="i"
         >
             <template v-slot:activator="{ on }">
                 <v-btn
-                    :class="`default-button__${li.value}`"
+                    class="player__hand__button"
+                    :class="`player__hand__button__${li.value}`"
                     ref="player"
-                    @click.stop="handlerUserHandChoose"
                     text
                     outlined
                     fab
-                    class="default-button"
                     v-on="on"
-                    :disabled="!isGameReady"
+                    :disabled="!isGameStart"
                     :data-shape="li.value"
+                    @click.stop="handlerClick"
                 >
-                    <span class="default-button__title">{{ li.value }}</span>
+                    <span class="player__hand__title">
+                        {{ li.value }}
+                    </span>
                 </v-btn>
             </template>
             <span>{{ li.value }}</span>
@@ -30,7 +33,7 @@
         name : 'GamerPlayer',
 
         props : {
-            isGameReady : Boolean,
+            isGameStart : Boolean,
             shape : Array
         },
 
@@ -40,45 +43,54 @@
 
         
         methods : {
-            handlerUserHandChoose(e){
-                this.$emit('handlerUserHandChoose', e);
+            handlerClick(e){
+                this.$emit('onClickUserHand', e);
             }
         }
     }
 </script>
 
 <style scoped>  
-    .gamer_player_wrap{
-        margin-bottom:30px;
+    .player__hand__wrap{
         display:inline-block;
         overflow:hidden;
+        margin-bottom:30px;
     }
-    .default-button{
+
+    .player__hand__button{
+        float:left;
         display:block; 
         padding:0;
         margin:0 20px;
         width:80px !important;
         height:80px !important;
-        float:left;
-        cursor:pointer;    
         box-sizing:border-box;
         background:#fff url('../assets/img/hands.jpg')no-repeat;
+        cursor:pointer;    
     }
-    .default-button:hover{
+
+    .player__hand__button:hover{
         border:1px solid #1976d2 !important; 
     }
-    .default-button__title{display:block;position:relative;z-index:-1;}
 
-    .default-button__rock{ 
+    .player__hand__title{
+        display:block;
+        position:relative;
+        z-index:-1;
+    }
+
+    .player__hand__button__rock{ 
         background-size:190px;
         background-position:14px -10px;
     }
-    .default-button__scissors{ 
+
+    .player__hand__button__scissors{ 
         background-size:186px;
         background-position:-47px 3px;
     }
-    .default-button__paper{ 
+
+    .player__hand__button__paper{ 
         background-size:180px;
         background-position:-107px 4px; 
-    }
+    }    
 </style>
